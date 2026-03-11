@@ -1,0 +1,148 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/products">
+      <img
+        src="../assets/shopnest.png"
+        alt="ShopNest"
+        class="navbar-brand"
+        style="height: 40px; width: auto"
+      />
+      <span
+        class="navbar-brand"
+        style="height: 40px; width: auto; font-size: 1.35rem"
+        >Shop<span style="color: #3498db">Nest</span></span
+      >
+    </a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <!-- Logged in -->
+        <ng-container *ngIf="authService.isLoggedIn()">
+          <!-- Customer links -->
+          <ng-container *ngIf="!authService.isAdmin()">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/contact"
+                routerLinkActive="active"
+              >
+                📩 Contact Us
+              </a>
+            </li>
+          </ng-container></ng-container
+        >
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">
+            Products
+          </a>
+        </li>
+
+        <!-- Not logged in -->
+        <ng-container *ngIf="!authService.isLoggedIn()">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active">
+              Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/register"
+              routerLinkActive="active"
+            >
+              Register
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Logged in -->
+        <ng-container *ngIf="authService.isLoggedIn()">
+          <!-- Customer links -->
+          <ng-container *ngIf="!authService.isAdmin()">
+            <li class="nav-item">
+              <a class="nav-link position-relative" routerLink="/cart">
+                🛒
+                <span
+                  *ngIf="cartService.getTotalItems() > 0"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                >
+                  {{ cartService.getTotalItems() }}
+                </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/my-orders"
+                routerLinkActive="active"
+              >
+                📋 My Orders
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- Admin links -->
+          <ng-container *ngIf="authService.isAdmin()">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/admin-orders"
+                routerLinkActive="active"
+              >
+                🛠️ Orders
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/user-orders"
+                routerLinkActive="active"
+              >
+                👥 Users
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- User info -->
+          <li class="nav-item">
+            <span class="nav-link text-warning">
+              👤 {{ authService.getUser()?.firstName }}
+              <span class="badge bg-secondary ms-1">
+                {{ authService.getRole() }}
+              </span>
+            </span>
+          </li>
+
+          <li class="nav-item">
+            <button class="btn btn-outline-light btn-sm" (click)="logout()">
+              Logout
+            </button>
+          </li>
+        </ng-container>
+
+        <!-- Dark/Light Mode Toggle -->
+        <li class="nav-item d-flex align-items-center ms-2">
+          <button
+            class="btn btn-sm rounded-pill px-3"
+            style="transition: all 0.3s ease"
+            [style.background]="
+              themeService.isDarkMode() ? '#f39c12' : '#2c3e50'"
+            [style.color]="themeService.isDarkMode() ? '#1a1a2e' : '#ffffff'"
+            [style.border]="
+              themeService.isDarkMode()
+                ? '2px solid #f39c12'
+                : '2px solid #ffffff'"
+            (click)="themeService.toggleTheme()">
+            {{ themeService.isDarkMode() ? "☀️ Light" : "🌙 Dark" }}
+          </button>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

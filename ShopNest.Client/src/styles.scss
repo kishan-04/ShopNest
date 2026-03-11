@@ -1,0 +1,105 @@
+// Light mode (default)
+body {
+  background-color: #f4f4f4;
+  color: #212529;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Dark mode
+body.dark-mode {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+
+  // Navbar
+  .navbar {
+    background-color: #0f0f1a !important;
+  }
+
+  // Cards
+  .card {
+    background-color: #16213e;
+    border-color: #2a2a4a;
+    color: #e0e0e0;
+  }
+
+  .card-header {
+    background-color: #0f3460 !important;
+    border-color: #2a2a4a;
+    color: #e0e0e0 !important;
+  }
+
+  .card-footer {
+    background-color: #16213e !important;
+    border-color: #2a2a4a;
+    color: #e0e0e0 !important;
+  }
+
+  // Inputs
+  .form-control, .form-select {
+    background-color: #0f3460;
+    border-color: #2a2a4a;
+    color: #e0e0e0;
+
+    &::placeholder {
+      color: #8888aa;
+    }
+
+    &:focus {
+      background-color: #0f3460;
+      color: #e0e0e0;
+      border-color: #3498db;
+      box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+  }
+
+  // Buttons
+  .btn-outline-secondary {
+    color: #e0e0e0;
+    border-color: #2a2a4a;
+
+    &:hover {
+      background-color: #2a2a4a;
+      color: #e0e0e0;
+    }
+  }
+
+  // Text colors
+  .text-muted {
+    color: #8888aa !important;
+  }
+
+  // Table
+  table {
+    color: #e0e0e0;
+  }
+
+  // Alert
+  .alert-danger {
+    background-color: #3d1a1a;
+    border-color: #7a2a2a;
+    color: #ff8888;
+  }
+
+  .alert-success {
+    background-color: #1a3d1a;
+    border-color: #2a7a2a;
+    color: #88ff88;
+  }
+
+  // Pagination
+  .page-link {
+    background-color: #16213e;
+    border-color: #2a2a4a;
+    color: #e0e0e0;
+  }
+
+  .page-item.active .page-link {
+    background-color: #0f3460;
+    border-color: #3498db;
+  }
+
+  // Spinner overlay
+  .bg-light {
+    background-color: #16213e !important;
+  }
+}

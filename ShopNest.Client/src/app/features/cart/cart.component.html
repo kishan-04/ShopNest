@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <h2 class="mb-4">🛒 My Cart</h2>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Loading cart...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Empty Cart -->
+  <div
+    *ngIf="!isLoading && (!cart || cart.items.length === 0)"
+    class="text-center mt-5"
+  >
+    <p class="text-muted fs-5">Your cart is empty 😢</p>
+    <a routerLink="/products" class="btn btn-primary mt-2">
+      Continue Shopping
+    </a>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="!isLoading && cart && cart.items.length > 0">
+    <div class="card mb-3" *ngFor="let item of cart.items">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <!-- Product Name & Price -->
+          <div class="col-md-4">
+            <h6 class="mb-0">{{ item.productName }}</h6>
+            <small class="text-muted">${{ item.unitPrice }} each</small>
+          </div>
+
+          <!-- Quantity Controls -->
+          <div class="col-md-4 d-flex align-items-center gap-2">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              (click)="updateQuantity(item.productId, item.quantity - 1)"
+              [disabled]="item.quantity <= 1"
+            >
+              −
+            </button>
+            <span class="px-2 fw-bold">{{ item.quantity }}</span>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              (click)="updateQuantity(item.productId, item.quantity + 1)"
+              [disabled]="item.quantity >= item.stock"
+            >
+              +
+            </button>
+          </div>
+
+          <!-- Subtotal & Remove -->
+          <div
+            class="col-md-4 d-flex justify-content-between align-items-center"
+          >
+            <span class="fw-bold text-primary">${{ item.subtotal }}</span>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="removeItem(item.productId)"
+            >
+              🗑️ Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="card mt-4 bg-light">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-1">
+              Total Items: <strong>{{ cart.totalItems }}</strong>
+            </p>
+            <h5 class="mb-0">
+              Total: <span class="text-primary">${{ cart.totalPrice }}</span>
+            </h5>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-danger" (click)="clearCart()">
+              Clear Cart
+            </button>
+            <button class="btn btn-success" routerLink="/checkout">
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

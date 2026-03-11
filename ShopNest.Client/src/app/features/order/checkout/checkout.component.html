@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <div class="row">
+
+    <!-- Checkout Form -->
+    <div class="col-md-7">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h4 class="mb-0">📦 Checkout</h4>
+        </div>
+        <div class="card-body">
+
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+
+            <div class="mb-3">
+              <label class="form-label">Shipping Address</label>
+              <textarea
+                class="form-control"
+                rows="4"
+                formControlName="shippingAddress"
+                placeholder="Enter your full shipping address..."
+                [ngClass]="{ 'is-invalid': isFieldInvalid('shippingAddress') }">
+              </textarea>
+              <div *ngIf="isFieldInvalid('shippingAddress')" class="invalid-feedback">
+                Please enter a valid shipping address (min 10 characters).
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-success w-100"
+              [disabled]="checkoutForm.invalid || isLoading">
+              {{ isLoading ? 'Placing Order...' : '✅ Place Order' }}
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">🧾 Order Summary</h5>
+        </div>
+        <div class="card-body">
+
+          <div *ngIf="isCartLoading" class="text-center">
+            <div class="spinner-border spinner-border-sm"></div>
+          </div>
+
+          <div *ngIf="!isCartLoading && cart">
+            <div *ngFor="let item of cart.items" class="d-flex justify-content-between mb-2">
+              <span>{{ item.productName }} x{{ item.quantity }}</span>
+              <span class="fw-bold">${{ item.subtotal }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+              <strong>Total</strong>
+              <strong class="text-primary">${{ cart.totalPrice }}</strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <a routerLink="/cart" class="btn btn-outline-secondary w-100 mt-2">
+        ← Back to Cart
+      </a>
+
+    </div>
+  </div>
+</div>

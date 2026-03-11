@@ -1,0 +1,73 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header text-center">
+          <h4 class="mb-0">🔐 Login</h4>
+        </div>
+        <div class="card-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': isFieldInvalid('email') }"
+                formControlName="email"
+                placeholder="Enter your email"
+              />
+              <div *ngIf="isFieldInvalid('email')" class="invalid-feedback">
+                Please enter a valid email.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': isFieldInvalid('password') }"
+                  formControlName="password"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  (click)="showPassword = !showPassword"
+                >
+                  {{ showPassword ? "Hide" : "Show" }}
+                </button>
+                <div
+                  *ngIf="isFieldInvalid('password')"
+                  class="invalid-feedback"
+                >
+                  Password must be at least 6 characters.
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="loginForm.invalid || isLoading"
+            >
+              {{ isLoading ? "Logging in..." : "Login" }}
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <small
+              >Don't have an account?
+              <a routerLink="/register">Register here</a>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

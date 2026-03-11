@@ -1,0 +1,68 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow-sm">
+
+        <!-- Header -->
+        <div class="card-header text-center py-3"
+             style="background: #2c3e50;">
+          <h4 class="mb-0 text-white">📩 Contact Us</h4>
+          <small class="text-white-50">
+            We'd love to hear from you!
+          </small>
+        </div>
+
+        <div class="card-body p-4">
+
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+            <!-- Subject -->
+            <div class="mb-3">
+              <label class="form-label">Subject</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="subject"
+                placeholder="What is your message about?"
+                [ngClass]="{ 'is-invalid': isFieldInvalid('subject') }" />
+              <div *ngIf="isFieldInvalid('subject')" class="invalid-feedback">
+                Subject must be at least 5 characters.
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea
+                class="form-control"
+                rows="6"
+                formControlName="message"
+                placeholder="Write your message here..."
+                [ngClass]="{ 'is-invalid': isFieldInvalid('message') }">
+              </textarea>
+              <div *ngIf="isFieldInvalid('message')" class="invalid-feedback">
+                Message must be at least 20 characters.
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="contactForm.invalid || isLoading">
+              {{ isLoading ? 'Sending...' : '📤 Send Message' }}
+            </button>
+
+          </form>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer text-center text-muted py-3">
+          <small>We typically respond within 24 hours 😊</small>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

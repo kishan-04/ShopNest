@@ -1,0 +1,212 @@
+<div class="container mt-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+      Our Products
+      <small class="text-muted fs-6">({{ totalCount }} items)</small>
+    </h2>
+    <a
+      *ngIf="authService.isAdmin()"
+      routerLink="/products/new"
+      class="btn btn-success"
+    >
+      + Add Product
+    </a>
+  </div>
+
+  <!-- Search and Filter Row -->
+  <div class="row mb-4">
+    <!-- Search Input -->
+    <div class="col-md-6 mb-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="🔍 Search products..."
+        #searchInput
+        (input)="onSearch(searchInput.value)"
+      />
+    </div>
+
+    <!-- Category Filter -->
+    <div class="col-md-4 mb-2">
+      <select
+        class="form-select"
+        #categorySelect
+        (change)="onCategoryChange(categorySelect.value)"
+      >
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Loading products...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Products Grid -->
+  <div class="row" *ngIf="!isLoading && !errorMessage">
+    <div class="col-md-4 mb-4" *ngFor="let product of products">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <img
+            [src]="
+              product.imageUrl
+                ? product.imageUrl
+                : 'https://placehold.co/400x300?text=No+Image'
+            "
+            class="card-img-top"
+            style="height: 200px; object-fit: cover"
+            [alt]="product.name"
+            (error)="onImageError($event)"
+          />
+          <span class="badge bg-primary mb-2">{{
+            getCategoryName(product.categoryId)
+          }}</span>
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text text-muted">{{ product.description }}</p>
+          <p class="card-text fw-bold text-primary fs-5">
+            ${{ product.price }}
+          </p>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': product.stock > 10,
+              'bg-warning': product.stock > 0 && product.stock <= 10,
+              'bg-danger': product.stock === 0,
+            }"
+          >
+            {{
+              product.stock === 0
+                ? "Out of Stock"
+                : product.stock <= 10
+                  ? "Low Stock"
+                  : "In Stock"
+            }}
+          </span>
+        </div>
+
+        <div class="card-footer">
+          <!-- Add to Cart with Quantity Selector -->
+          <ng-container
+            *ngIf="authService.isLoggedIn() && !authService.isAdmin()"
+          >
+            <!-- Quantity Controls -->
+            <div
+              class="d-flex align-items-center justify-content-center gap-2 mb-2"
+            >
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                (click)="decreaseQuantity(product.id)"
+              >
+                −
+              </button>
+              <span class="fw-bold px-2">{{
+                quantities[product.id] || 1
+              }}</span>
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                (click)="increaseQuantity(product.id, product.stock)"
+              >
+                +
+              </button>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button
+              class="btn btn-primary btn-sm w-100"
+              (click)="addToCart(product.id)"
+              [disabled]="product.stock === 0"
+            >
+              {{ product.stock === 0 ? "Out of Stock" : "🛒 Add to Cart" }}
+            </button>
+          </ng-container>
+
+          <!-- Admin buttons -->
+          <div
+            *ngIf="authService.isAdmin()"
+            class="d-flex justify-content-end gap-2 mt-2"
+          >
+            <button
+              class="btn btn-outline-warning btn-sm px-3"
+              (click)="onEdit(product.id)"
+            >
+              <i class="bi bi-pencil"></i>
+              <span class="ms-1">Edit</span>
+            </button>
+
+            <button
+              class="btn btn-outline-danger btn-sm px-3"
+              (click)="onDelete(product.id)"
+            >
+              <i class="bi bi-trash"></i>
+              <span class="ms-1">Delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div
+    *ngIf="!isLoading && !errorMessage && products.length === 0"
+    class="text-center text-muted mt-5"
+  >
+    <p>No products found.</p>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    class="d-flex justify-content-end align-items-center mt-5 mb-3"
+    *ngIf="totalPages > 1"
+  >
+    <!-- LEFT — Page numbers of current bundle with prev/next bundle buttons -->
+    <div class="d-flex align-items-center gap-1">
+      <!-- Previous bundle button -->
+      <button
+        class="btn btn-sm btn-light border rounded-circle"
+        style="width: 32px; height: 32px; padding: 0"
+        [disabled]="currentBundle === 0"
+        (click)="prevBundle()"
+      >
+        ‹
+      </button>
+
+      <!-- Page number buttons -->
+      <ng-container *ngFor="let p of bundlePages">
+        <button
+          class="btn btn-sm rounded-circle"
+          style="width: 32px; height: 32px; padding: 0; font-size: 13px"
+          [ngClass]="
+            currentPage === p
+              ? 'btn-dark text-white border-0'
+              : 'btn-light border'
+          "
+          (click)="onPageChange(p)"
+        >
+          {{ p }}
+        </button>
+      </ng-container>
+
+      <!-- Next bundle button -->
+      <button
+        class="btn btn-sm btn-light border rounded-circle"
+        style="width: 32px; height: 32px; padding: 0"
+        [disabled]="currentBundle === totalBundles - 1"
+        (click)="nextBundle()"
+      >
+        ›
+      </button>
+    </div>
+  </div>
+</div>

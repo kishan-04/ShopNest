@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header text-center">
+          <h4 class="mb-0">📝 Register</h4>
+        </div>
+        <div class="card-body">
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': isFieldInvalid('firstName') }"
+                formControlName="firstName"
+                placeholder="Enter your first name"
+              />
+              <div *ngIf="isFieldInvalid('firstName')" class="invalid-feedback">
+                First name is required.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': isFieldInvalid('lastName') }"
+                formControlName="lastName"
+                placeholder="Enter your last name"
+              />
+              <div *ngIf="isFieldInvalid('lastName')" class="invalid-feedback">
+                Last name is required.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': isFieldInvalid('email') }"
+                formControlName="email"
+                placeholder="Enter your email"
+              />
+              <div *ngIf="isFieldInvalid('email')" class="invalid-feedback">
+                Please enter a valid email.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': isFieldInvalid('password') }"
+                  formControlName="password"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  (click)="showPassword = !showPassword"
+                >
+                  {{ showPassword ? "Hide" : "Show" }}
+                </button>
+                <div
+                  *ngIf="isFieldInvalid('password')"
+                  class="invalid-feedback"
+                >
+                  Password must be at least 6 characters.
+                </div>
+              </div>
+            </div>
+            
+            <button
+              type="submit"
+              class="btn btn-success w-100"
+              [disabled]="registerForm.invalid || isLoading"
+            >
+              {{ isLoading ? "Registering..." : "Register" }}
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <small
+              >Already have an account?
+              <a routerLink="/login">Login here</a>
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

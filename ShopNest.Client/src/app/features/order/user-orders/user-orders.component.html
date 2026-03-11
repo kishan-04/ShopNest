@@ -1,0 +1,157 @@
+<div class="container mt-4">
+  <h2 class="mb-4">👥 Users & Their Orders</h2>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Loading...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Main Layout -->
+  <div *ngIf="!isLoading && !errorMessage" class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      <div class="card shadow-sm sticky-top" style="top: 20px">
+        <div class="card-body">
+          <h6 class="fw-bold mb-2">🔍 Search User</h6>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search by name or email..."
+            #searchInput
+            (input)="onSearch(searchInput.value)"
+          />
+
+          <hr />
+
+          <p class="text-muted small mb-1">
+            Total Users: <strong>{{ userOrders.length }}</strong>
+          </p>
+          <p class="text-muted small mb-0">
+            Showing: <strong>{{ filteredUsers.length }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users List -->
+    <div class="col-md-9">
+      <!-- Empty State -->
+      <div *ngIf="filteredUsers.length === 0" class="text-center mt-5">
+        <p class="text-muted fs-5">No users found.</p>
+      </div>
+
+      <!-- User Cards -->
+      <div *ngFor="let user of filteredUsers" class="card mb-3 shadow-sm">
+        <!-- User Header — click to expand -->
+        <div
+          class="card-body"
+          style="cursor: pointer"
+          (click)="toggleUser(user.userId)"
+        >
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="mb-1">
+                <strong>👤 {{ user.firstName }} {{ user.lastName }}</strong>
+              </p>
+              <p class="mb-1 text-muted small">{{ user.email }}</p>
+              <p class="mb-0">
+                <span class="badge bg-secondary me-2">
+                  {{ user.totalOrders }} orders
+                </span>
+                <span class="fw-bold text-primary">
+                  ${{ user.totalSpent | number: "1.2-2" }} total spent
+                </span>
+              </p>
+            </div>
+            <button
+            class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-auto m-2"
+            (click)="deleteUser(user.userId, user.firstName + ' ' + user.lastName)">
+            🗑️ Delete
+          </button>
+          <span class="text-muted fs-5">
+            {{ expandedUserId === user.userId ? "▲" : "▼" }}
+          </span>
+          </div>
+        </div>
+
+        <!-- User Orders — expanded -->
+        <div
+          *ngIf="expandedUserId === user.userId"
+          class="card-footer bg-light p-3"
+        >
+          <!-- No orders -->
+          <div
+            *ngIf="user.orders.length === 0"
+            class="text-muted text-center py-2"
+          >
+            No orders yet.
+          </div>
+
+          <!-- Order Cards inside User -->
+          <div *ngFor="let order of user.orders" class="card mb-2">
+            <!-- Order Header -->
+            <div
+              class="card-body py-2"
+              style="cursor: pointer"
+              (click)="toggleOrder(order.id)"
+            >
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <p class="mb-1">
+                    <strong>Order #{{ order.id }}</strong>
+                    <span class="text-muted ms-2 small">
+                      📅 {{ order.createdAt | date: "dd MMM yyyy" }}
+                    </span>
+                  </p>
+                  <p class="mb-0 text-muted small">
+                    {{ getProductNames(order) }}
+                  </p>
+                  <p class="mb-0 fw-bold text-primary">
+                    ${{ order.totalAmount }}
+                  </p>
+                </div>
+                <div class="d-flex flex-column align-items-end gap-1">
+                  <span class="badge {{ getStatusClass(order.status) }}">
+                    {{ getStatusIcon(order.status) }} {{ order.status }}
+                  </span>
+                  <span class="text-muted small">
+                    {{ expandedOrderId === order.id ? "▲" : "▼" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Items — expanded -->
+            <div
+              *ngIf="expandedOrderId === order.id"
+              class="card-footer bg-white"
+            >
+              <p class="fw-bold mb-2 small">📦 Items:</p>
+              <div
+                *ngFor="let item of order.items"
+                class="d-flex justify-content-between mb-1"
+              >
+                <span class="small">
+                  • {{ item.productName }}
+                  <small class="text-muted">({{ item.categoryName }})</small>
+                  x{{ item.quantity }}
+                </span>
+                <span class="fw-bold small">${{ item.subtotal }}</span>
+              </div>
+
+              <hr class="my-2" />
+
+              <small class="text-muted">📍 {{ order.shippingAddress }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
