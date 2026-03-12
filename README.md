@@ -218,12 +218,6 @@ ShopNest supports dark/light mode toggle — preference is saved in `localStorag
 
 ---
 
-## 👨‍💻 Author
-
-**Kishan** — Built with ❤️ from Kalol, Gujarat, India
-
----
-
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
