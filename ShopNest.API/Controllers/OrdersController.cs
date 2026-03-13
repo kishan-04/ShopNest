@@ -59,7 +59,7 @@ public class OrdersController : ControllerBase
     // PUT api/orders/{id}/status — update order status (Admin only)
     [HttpPut("{id:int}/status")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto dto)
+public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto dto)
     {
         try
         {

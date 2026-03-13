@@ -87,6 +87,15 @@
             <li class="nav-item">
               <a
                 class="nav-link"
+                routerLink="/dashboard"
+                routerLinkActive="active"
+              >
+                📊 Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
                 routerLink="/admin-orders"
                 routerLinkActive="active"
               >
@@ -127,17 +136,19 @@
             class="btn btn-sm rounded-pill px-3"
             style="transition: all 0.3s ease"
             [style.background]="
-              themeService.isDarkMode() ? '#f39c12' : '#2c3e50'"
+              themeService.isDarkMode() ? '#f39c12' : '#2c3e50'
+            "
             [style.color]="themeService.isDarkMode() ? '#1a1a2e' : '#ffffff'"
             [style.border]="
               themeService.isDarkMode()
                 ? '2px solid #f39c12'
-                : '2px solid #ffffff'"
-            (click)="themeService.toggleTheme()">
+                : '2px solid #ffffff'
+            "
+            (click)="themeService.toggleTheme()"
+          >
             {{ themeService.isDarkMode() ? "☀️ Light" : "🌙 Dark" }}
           </button>
         </li>
-
       </ul>
     </div>
   </div>

@@ -1,0 +1,166 @@
+<div class="container mt-4">
+  <h2 class="mb-4">📊 Admin Dashboard</h2>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Loading dashboard...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && dashboard">
+
+    <!-- Stats Cards Row -->
+    <div class="row mb-4">
+
+      <!-- Total Users -->
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100"
+             style="border-left: 4px solid #3498db !important;">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Total Users</p>
+              <h3 class="fw-bold mb-0">{{ dashboard.totalUsers }}</h3>
+            </div>
+            <span style="font-size: 2.5rem;">👥</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Orders -->
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100"
+             style="border-left: 4px solid #f39c12 !important;">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Total Orders</p>
+              <h3 class="fw-bold mb-0">{{ dashboard.totalOrders }}</h3>
+            </div>
+            <span style="font-size: 2.5rem;">📦</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Sales -->
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100"
+             style="border-left: 4px solid #27ae60 !important;">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Total Sales</p>
+              <h3 class="fw-bold mb-0">${{ dashboard.totalSales | number:'1.2-2' }}</h3>
+            </div>
+            <span style="font-size: 2.5rem;">💰</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Products -->
+      <div class="col-md-3 mb-3">
+        <div class="card shadow-sm border-0 h-100"
+             style="border-left: 4px solid #9b59b6 !important;">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Total Products</p>
+              <h3 class="fw-bold mb-0">{{ dashboard.totalProducts }}</h3>
+            </div>
+            <span style="font-size: 2.5rem;">🛍️</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+
+      <!-- Sales Line Chart -->
+      <div class="col-md-8 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-header fw-bold">
+            📈 Sales — Last 7 Days
+          </div>
+          <div class="card-body">
+            <div *ngIf="dashboard.salesLast7Days.length === 0"
+                 class="text-center text-muted py-4">
+              No sales data yet.
+            </div>
+            <canvas *ngIf="dashboard.salesLast7Days.length > 0"
+                    baseChart
+                    [data]="salesChartData"
+                    [options]="salesChartOptions"
+                    type="line">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders by Status Pie Chart -->
+      <div class="col-md-4 mb-3">
+        <div class="card shadow-sm h-100">
+          <div class="card-header fw-bold">
+            🥧 Orders by Status
+          </div>
+          <div class="card-body d-flex align-items-center justify-content-center">
+            <div *ngIf="dashboard.ordersByStatus.length === 0"
+                 class="text-center text-muted py-4">
+              No orders yet.
+            </div>
+            <canvas *ngIf="dashboard.ordersByStatus.length > 0"
+                    baseChart
+                    [data]="statusChartData"
+                    [options]="statusChartOptions"
+                    type="doughnut">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">
+        📋 Recent Orders
+      </div>
+      <div class="card-body p-0">
+        <div *ngIf="dashboard.recentOrders.length === 0"
+             class="text-center text-muted py-4">
+          No orders yet.
+        </div>
+        <table *ngIf="dashboard.recentOrders.length > 0"
+               class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of dashboard.recentOrders">
+              <td><strong>#{{ order.id }}</strong></td>
+              <td>{{ order.customerName }}</td>
+              <td class="fw-bold text-primary">${{ order.totalAmount }}</td>
+              <td>
+                <span class="badge {{ getStatusClass(order.status) }}">
+                  {{ getStatusIcon(order.status) }} {{ order.status }}
+                </span>
+              </td>
+              <td class="text-muted small">
+                {{ order.createdAt | date:'dd MMM yyyy' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

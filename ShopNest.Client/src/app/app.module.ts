@@ -18,6 +18,8 @@ import { AdminOrdersComponent } from './features/order/admin-orders/admin-orders
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { UserOrdersComponent } from './features/order/user-orders/user-orders.component';
 import { ContactComponent } from './features/contact/contact.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ContactComponent } from './features/contact/contact.component';
     AdminOrdersComponent,
     UserOrdersComponent,
     ContactComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { ContactComponent } from './features/contact/contact.component';
       timeOut: 3000,
       closeButton: true,
       progressBar: true
-    })
+    }),
+    NgChartsModule
   ],
   providers: [
     {

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Injectable, NgModule } from '@angular/core';
+import { CanActivate, Router, RouterModule, Routes } from '@angular/router';
 import { ProductsComponent } from './features/product/products/products.component';
 import { ProductFormComponent } from './features/product/product-form/product-form.component';
 import { LoginComponent } from './features/auth/login/login.component';
@@ -12,9 +12,26 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
 import { UserOrdersComponent } from './features/order/user-orders/user-orders.component';
 import { ContactComponent } from './features/contact/contact.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { AuthService } from './core/services/auth.service';
+
+
+@Injectable({ providedIn: 'root' })
+export class HomeGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {}
+
+  canActivate(): boolean {
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/products']);
+    }
+    return false;
+  }
+}
 
 const routes: Routes = [
-  { path: '',                  redirectTo: 'products', pathMatch: 'full' },
+  { path: '',                  component: DashboardComponent },
   { path: 'products',          component: ProductsComponent },
   { path: 'login',             component: LoginComponent },
   { path: 'register',          component: RegisterComponent },
@@ -29,7 +46,8 @@ const routes: Routes = [
 
   // Admin only routes
   { path: 'admin-orders',      component: AdminOrdersComponent,  canActivate: [AdminGuard] },
-  { path: 'user-orders', component: UserOrdersComponent,canActivate: [AdminGuard] }
+  { path: 'user-orders', component: UserOrdersComponent,canActivate: [AdminGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AdminGuard] }
 ];
 
 @NgModule({

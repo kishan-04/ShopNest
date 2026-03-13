@@ -45,6 +45,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CartRepository>();
 builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<DashboardRepository>();
 
 // ── Service Layer ─────────────────────────────────────────
 builder.Services.AddScoped<ProductService>();
@@ -52,6 +53,8 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<DashboardService>();
+
 
 // ── JWT Authentication ────────────────────────────────────
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
