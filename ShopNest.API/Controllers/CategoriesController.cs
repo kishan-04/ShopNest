@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShopNest.API.Repositories;
+using ShopNest.API.Services;
 
 namespace ShopNest.API.Controllers;
 
@@ -7,18 +7,18 @@ namespace ShopNest.API.Controllers;
 [Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
-    private readonly CategoryRepository _categoryRepository;
+    private readonly CategoryService _categoryService;
 
-    public CategoriesController(CategoryRepository categoryRepository)
+    public CategoriesController(CategoryService categoryService)
     {
-        _categoryRepository = categoryRepository;
+        _categoryService = categoryService;
     }
 
     // GET api/categories
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var categories = await _categoryRepository.GetAllAsync();
+        var categories = await _categoryService.GetAllAsync();
         return Ok(categories);
     }
 }

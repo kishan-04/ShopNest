@@ -31,27 +31,27 @@ export class HomeGuard implements CanActivate {
 }
 
 const routes: Routes = [
-  { path: '',                  component: DashboardComponent },
+  { path: '',                  component: ProductsComponent },
   { path: 'products',          component: ProductsComponent },
   { path: 'login',             component: LoginComponent },
   { path: 'register',          component: RegisterComponent },
 
   // Protected routes — must be logged in
-  { path: 'products/new',      component: ProductFormComponent,  canActivate: [AuthGuard] },
-  { path: 'products/edit/:id', component: ProductFormComponent,  canActivate: [AuthGuard] },
   { path: 'cart',              component: CartComponent,         canActivate: [AuthGuard] },
   { path: 'checkout',          component: CheckoutComponent,     canActivate: [AuthGuard] },
   { path: 'my-orders',         component: MyOrdersComponent,     canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent,                canActivate: [AuthGuard] },
 
   // Admin only routes
+  { path: 'products/new',      component: ProductFormComponent,  canActivate: [AdminGuard] },
+  { path: 'products/edit/:id', component: ProductFormComponent,  canActivate: [AdminGuard] },
   { path: 'admin-orders',      component: AdminOrdersComponent,  canActivate: [AdminGuard] },
-  { path: 'user-orders', component: UserOrdersComponent,canActivate: [AdminGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AdminGuard] }
+  { path: 'user-orders',       component: UserOrdersComponent,   canActivate: [AdminGuard] },
+  { path: 'dashboard',         component: DashboardComponent,    canActivate: [AdminGuard] }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule { }5

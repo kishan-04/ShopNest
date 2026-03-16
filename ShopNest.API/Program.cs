@@ -50,6 +50,7 @@ builder.Services.AddScoped<DashboardRepository>();
 // ── Service Layer ─────────────────────────────────────────
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<EmailService>();
