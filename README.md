@@ -23,6 +23,7 @@ A fully featured e-commerce web application built from scratch using **Angular 1
 - Dark / Light mode toggle
 
 ### 🛠️ Admin
+- Dashboard with key metrics (users, orders, revenue)
 - Add, edit, soft-delete products
 - View all orders with search & status filter
 - Update order status
@@ -68,6 +69,7 @@ ShopNest/
 │       │   ├── guards/         → Auth & Admin guards
 │       │   └── interceptors/   → JWT interceptor
 │       ├── features/           → Components
+│       │   ├── dashboard/      → Admin dashboard
 │       │   ├── products/       → Product list, form
 │       │   ├── cart/           → Shopping cart
 │       │   ├── order/          → Checkout, my orders, admin orders
@@ -178,6 +180,7 @@ ng serve
 
 | Page | Route | Access |
 |---|---|---|
+| Dashboard | `/dashboard` |	Admin |
 | Products | `/products` | Public |
 | Product Form | `/products/new` | Admin |
 | Cart | `/cart` | Customer |
